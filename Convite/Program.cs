@@ -1,6 +1,6 @@
 using Convite.Data;
+using Convite.Models;
 using Convite.Services;
-using Convite.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +19,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.Configure<Settings>(builder.Configuration.GetSection("SendGridSettings"));
 builder.Services.AddTransient<Convite.Services.Interfaces.IEmailSender, Convite.Services.EmailSender>();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
     options.SignIn.RequireConfirmedAccount = true;
     options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
 }).AddEntityFrameworkStores<ApplicationDbContext>();

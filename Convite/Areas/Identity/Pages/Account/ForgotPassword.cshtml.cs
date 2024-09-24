@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Convite.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,10 @@ namespace Convite.Areas.Identity.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly Convite.Services.Interfaces.IEmailSender _emailSender;
         
-        public ForgotPasswordModel(UserManager<IdentityUser> userManager, Convite.Services.Interfaces.IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, Convite.Services.Interfaces.IEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
