@@ -113,6 +113,8 @@ namespace Convite.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    //colocar aqui o envio de email
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -130,7 +132,6 @@ namespace Convite.Areas.Identity.Pages.Account
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
                         return RedirectToPage("/Account/Login");
-                        
                     }
                     else
                     {
@@ -143,7 +144,6 @@ namespace Convite.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
             // If we got this far, something failed, redisplay form
             return Page();
         }

@@ -108,7 +108,7 @@ namespace Convite.Areas.Identity.Pages.Account
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ErrorMessage = "Error loading external login information.";
+                ErrorMessage = "Erro ao carregar informações de login externas.";
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
 
