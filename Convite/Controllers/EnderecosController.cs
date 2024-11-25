@@ -28,7 +28,10 @@ namespace Convite.Controllers
         // GET: Enderecos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Enderecos.Include(e => e.User);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var applicationDbContext = _context.Enderecos.
+                Include(e => e.User).
+                Where(a=>a.UserId == userId);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -57,12 +60,12 @@ namespace Convite.Controllers
         // GET: Enderecos/Create
         public IActionResult Create()
         {
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var userName = User.Identity.Name;
-            
+            //ViewData["userId"] = userId;
+            //ViewData["userName"] = userName;
+            ViewData["UserId"] = new SelectList(_context.Users.Where(a=>a.UserName == userName), "Id", "UserName");
 
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -101,13 +104,13 @@ namespace Convite.Controllers
             {
                 return NotFound();
             }
-
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var endereco = await _context.Enderecos.FindAsync(id);
             if (endereco == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", endereco.UserId);
+            ViewData["UserId"] = new SelectList(_context.Users.Where(a=>a.Id == userId ), "Id", "UserName", endereco.UserId);
             return View(endereco);
         }
 

@@ -39,6 +39,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
+                @*ViewData["userId"] = userId;
+                ViewData["userName"] = userName;*@
                 <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
             </div>
             <div class="form-group">

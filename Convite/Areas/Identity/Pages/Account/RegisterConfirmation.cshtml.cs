@@ -20,12 +20,15 @@ namespace Convite.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _sender;
+        private readonly Convite.Services.Interfaces.IEmailSender _emailSender;
 
-        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender sender, Services.Interfaces.IEmailSender emailSender)
         {
             _userManager = userManager;
             _sender = sender;
+            _emailSender = emailSender;
         }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -60,8 +63,27 @@ namespace Convite.Areas.Identity.Pages.Account
             }
 
             Email = email;
+            //envia email de confirmação
+            var EnviaEmail = true;
+            if (EnviaEmail) 
+            {
+                var userId = await _userManager.GetUserIdAsync(user);
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var t = Url.Page(
+                    "/Account/ConfirmEmail",
+                    pageHandler: null,
+                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                    protocol: Request.Scheme);
+                await _emailSender.SendEmailAsync(
+                Email,
+                "Clique para no link para confirmar sua conta",
+                $"<a href='{t}'>Confirmar sua conta!!!</a>.");
+
+
+            }
             // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
@@ -73,7 +95,6 @@ namespace Convite.Areas.Identity.Pages.Account
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                     protocol: Request.Scheme);
             }
-
             return Page();
         }
     }
